@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Survey {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  questions   Question[]
+}
+
+model Question {
+  id              String           @id @default(uuid())
+  title           String
+  type            QuestionType
+  isRequired      Boolean
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now())
+  RadioQuestion   RadioQuestion?
+  CommentQuestion CommentQuestion?
+  Survey          Survey           @relation(fields: [surveyId], references: [id])
+  surveyId        Int
+}
+
+model RadioQuestion {
+  question Question @relation(fields: [id], references: [id], onDelete: Cascade)
+  id       String   @id
+  choices  String[]
+}
+
+model CommentQuestion {
+  question Question @relation(fields: [id], references: [id], onDelete: Cascade)
+  id       String   @id
+  comment  String   @db.Text()
+}
+
+enum QuestionType {
+  COMMENTQUESTION
+  RADIOGROUP
+}
