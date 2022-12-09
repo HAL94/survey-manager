@@ -19,32 +19,45 @@ model Survey {
   questions   Question[]
 }
 
+model QuestionType {
+  id       String     @id @default(uuid())
+  type     String     @unique()
+  Question Question[]
+}
+
 model Question {
-  id              String           @id @default(uuid())
-  title           String
-  type            QuestionType
-  isRequired      Boolean
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now())
-  RadioQuestion   RadioQuestion?
-  CommentQuestion CommentQuestion?
-  Survey          Survey           @relation(fields: [surveyId], references: [id])
-  surveyId        Int
+  id             String           @id @default(uuid())
+  title          String
+  QuestionType   QuestionType     @relation(fields: [questionTypeId], references: [id])
+  questionTypeId String
+  isRequired     Boolean
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  Survey         Survey           @relation(fields: [surveyId], references: [id])
+  surveyId       Int
+  options        QuestionOption[]
+  Answer         Answer[]
 }
 
-model RadioQuestion {
-  question Question @relation(fields: [id], references: [id], onDelete: Cascade)
-  id       String   @id
-  choices  String[]
+model QuestionOption {
+  id Int @id @default(autoincrement())
+
+  Question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+
+  Answer Answer[]
+
+  value String
 }
 
-model CommentQuestion {
-  question Question @relation(fields: [id], references: [id], onDelete: Cascade)
-  id       String   @id
-  comment  String   @db.Text()
-}
+model Answer {
+  id Int @id @default(autoincrement())
 
-enum QuestionType {
-  COMMENTQUESTION
-  RADIOGROUP
+  Question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+
+  QuestionOption   QuestionOption? @relation(fields: [questionOptionId], references: [id])
+  questionOptionId Int
+
+  answer String
 }

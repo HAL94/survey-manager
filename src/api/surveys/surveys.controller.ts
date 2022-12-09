@@ -2,18 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
   addSurvey,
-  addSurveyQuestion,
-  getAllSurvyes,
-  removeSurveyQuestion,
+  getAllSurvyes,  
 } from './surveys.service';
-import { PrismaClient, Prisma, Survey, Question } from '@prisma/client';
+import { PrismaClient, Prisma, Survey } from '@prisma/client';
 import {
-  ParamsWithId,
-  QuestionAddBody,
-  QuestionUpdateBody,
-  QuestionParamsInput,
-  SurveyAddBody,
-} from './survey.model';
+  SurveyInput,
+} from './survey.validation';
 import OperationResponse from '../../interfaces/operation-response.interface';
 const prisma = new PrismaClient();
 
@@ -38,7 +32,7 @@ export async function getSurveysRequest(
 }
 
 export async function createSurveyRequest(
-  req: Request<{}, {}, SurveyAddBody>,
+  req: Request<{}, {}, SurveyInput>,
   res: Response<OperationResponse<Survey>>,
   next: NextFunction,
 ) {
@@ -49,60 +43,6 @@ export async function createSurveyRequest(
       success: true,
       message: 'Successfully created survey',
       result: survey,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function updateQuestionRequest(
-  req: Request<{}, {}, QuestionUpdateBody>,
-  res: Response<OperationResponse>,
-  next: NextFunction,
-) {
-  try {
-    console.log('passed body', req.body);
-    res.status(200).json({
-      message: 'ok',
-      success: true,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-export async function addQuestionRequest(
-  req: Request<any, {}, QuestionAddBody>,
-  res: Response<OperationResponse<Question>>,
-  next: NextFunction,
-) {
-  try {
-    const params = req.params as ParamsWithId;
-    const surveyId = params.id;
-    console.log('addSurveyBody', req.body);
-    const question = await addSurveyQuestion(+surveyId, req.body);
-    res.status(200).json({
-      message: 'added a question successfully',
-      success: true,
-      result: question,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function removeQuestionRequest(
-  req: Request<any, {}, {}>,
-  res: Response<OperationResponse<any>>,
-  next: NextFunction,
-) {
-  try {
-    const { id: surveyId, qid: questionId } =
-      req.params as QuestionParamsInput;
-    const question = await removeSurveyQuestion(+surveyId, questionId);
-    return res.status(200).json({
-      result: question,
-      success: true,
-      message: 'Successfully removed the question from survey',
     });
   } catch (error) {
     next(error);

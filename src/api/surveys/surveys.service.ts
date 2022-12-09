@@ -1,9 +1,8 @@
-import { Prisma, Survey, Question, QuestionType } from '@prisma/client';
-import { QuestionAddBody, SurveyAddBody } from './survey.model';
+import { Survey, Question } from '@prisma/client';
+import { SurveyInput } from './survey.validation';
 
 import {
   createSurvey,
-  createSurveyQuestion,
   deleteSurveyQuestion,
   findAllSurveys,
   findSurveyById,
@@ -17,7 +16,7 @@ export async function getAllSurvyes() {
   }
 }
 
-export async function addSurvey(surveyInput: SurveyAddBody) {
+export async function addSurvey(surveyInput: SurveyInput) {
   try {
     const survey = await createSurvey(surveyInput);
     if (!survey) {
@@ -28,40 +27,13 @@ export async function addSurvey(surveyInput: SurveyAddBody) {
     throw error;
   }
 }
+
 export async function addSurveyQuestion(
   surveyId: number,
-  surveyQuestion: QuestionAddBody,
 ) {
   try {
     const survey = await findSurveyById(surveyId);
-    if (survey !== null) {
-      const questionInput: Prisma.QuestionCreateInput = {
-        isRequired: surveyQuestion.isRequired,
-        title: surveyQuestion.title,
-        type: surveyQuestion.type,
-        Survey: {
-          connect: {
-            id: surveyId,
-          },
-        },
-      };
-      if (surveyQuestion.type === QuestionType.RADIOGROUP) {
-        questionInput.RadioQuestion = {
-          create: {
-            choices: surveyQuestion.choices,
-          },
-        };
-      } else if (surveyQuestion.type === QuestionType.COMMENTQUESTION) {
-        questionInput.CommentQuestion = {
-          create: {
-            comment: '',
-          },
-        };
-      }
-      return await createSurveyQuestion(questionInput);
-    } else {
-      throw new Error(`Could not find survey with id ${surveyId}`);
-    }
+    return survey;
   } catch (error) {
     throw error;
   }

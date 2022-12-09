@@ -20,9 +20,7 @@ export function validateRequest(validators: RequestValidator) {
         req.body = await validators.body.parseAsync(req.body);
       }
       if (validators.params) {
-        const params = await validators.params.parseAsync(req.params);
-        console.log('params', params);
-        req.params = params;
+        req.params = await validators.params.parseAsync(req.params);
       }
       if (validators.query) {
         req.query = await validators.query.parseAsync(req.query);
@@ -35,7 +33,8 @@ export function validateRequest(validators: RequestValidator) {
         res.status(422);
         const parsedMsg = JSON.parse(error.message);
         if (parsedMsg instanceof SyntaxError === false) {
-          message = parsedMsg.map((item: any) => item.message).join('. ') || message;
+          message =
+            parsedMsg.map((item: any) => item.message).join('. ') || message;
         } else {
           message = error.message || message;
         }
