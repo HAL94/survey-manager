@@ -1,0 +1,8 @@
+
+li {
+  @apply m-2 text-gray-300
+}
+
+li.active {
+  @apply text-white shadow-sm
+}
