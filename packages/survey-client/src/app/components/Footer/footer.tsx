@@ -1,5 +1,7 @@
 const Footer = () => {
-  return <h1>footer</h1>;
+  return <footer className="mt-auto w-full">
+      Footer
+  </footer>;
 };
 
 export default Footer;

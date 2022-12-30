@@ -21,6 +21,15 @@ router.post(
   SurveyController.createSurveyRequest
 );
 
+router.post(
+  '/:surveyId',
+  validateRequest({
+    params: SurveyIdParam,
+    body: SurveyInput,
+  }),
+  SurveyController.updateSurveyRequest
+);
+
 router.get('/seed', SurveyController.seed);
 
 export default router;

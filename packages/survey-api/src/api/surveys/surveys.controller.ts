@@ -4,6 +4,7 @@ import {
   addSurvey,
   getAllSurvyes,
   getSurveyById,
+  updateSurvey,
 } from './surveys.service';
 import { PrismaClient, Prisma, Survey } from '@prisma/client';
 import {
@@ -40,6 +41,11 @@ export async function fetchSurveyById(
 ) {
   try {
     const result = await getSurveyById(+req.params.surveyId);
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(null);
+      }, 2000)
+    });
     return res.status(200).json({
       message: `Successfully fetched survey with id ${req.params.surveyId}`,
       success: true,
@@ -63,6 +69,25 @@ export async function createSurveyRequest(
       message: 'Successfully created survey',
       result: survey,
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateSurveyRequest(
+  req: Request<SurveyIdParam, {}, SurveyInput>,
+  res: Response<OperationResponse<Survey>>,
+  next: NextFunction
+) {
+  try {
+    const surveyInput = { ...req.body };
+    const surveyUpdated = await updateSurvey(+req.params.surveyId, surveyInput);
+    return res.status(200).json({
+      error: null,
+      message: 'Successfully updated survey',
+      result: surveyUpdated,
+      success: true
+    })
   } catch (error) {
     next(error);
   }

@@ -1,0 +1,14 @@
+button {
+  @apply mx-3 relative pb-2;
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #6b21a8;
+  bottom: 0px;
+}

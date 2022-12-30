@@ -41,10 +41,21 @@ export async function createSurvey(surveyInput: SurveyInput) {
   return survey;
 }
 
-export async function deleteSurveyQuestion(questionId: string) {
-  return await prisma.question.delete({
+
+export async function updateSurveyById(surveyId: number, surveyInput: SurveyInput) {
+  let survey = await findSurveyById(surveyId);
+  survey = {
+    ...survey,
+    ...surveyInput
+  }
+  return await prisma.survey.update({
     where: {
-      id: questionId,
+      id: surveyId
     },
+    data: {
+      title: survey.title,
+      description: survey.description
+    }
   });
+
 }

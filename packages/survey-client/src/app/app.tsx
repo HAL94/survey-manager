@@ -1,16 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RootLayout } from './layouts';
-import { Home, ErrorPage } from './pages';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import SurveyDetail, {
+import { Home, ErrorPage, SurveyPage, SurveyQuestionsPage, SurveyPageError, SurveyDetailPage } from './pages';
+
+
+import {
+  allSurveysLoader,
   surveyDetailLoader,
-} from './components/SurveyDetail/SurveyDetail';
-
-import { allSurveysLoader } from './pages/Home/home.page';
-
+  surveyUpdate,
+} from './utils';
 
 const queryClient = new QueryClient();
 
@@ -23,13 +24,25 @@ const AppContent = () => {
       children: [
         {
           path: '/',
-          element: <Home />,
+          element: <Home/>,
           loader: allSurveysLoader(queryClient),
         },
         {
           path: 'survey/:surveyId',
-          loader: surveyDetailLoader(queryClient),
-          element: <SurveyDetail />,
+          element: <SurveyPage />,
+          action: surveyUpdate,
+          errorElement: <SurveyPageError />,
+          children: [
+            {
+              path: '',
+              loader: surveyDetailLoader(queryClient),
+              element: <SurveyDetailPage />,
+            },
+            {
+              path: 'questions',
+              element: <SurveyQuestionsPage />,
+            },
+          ],
         },
       ],
     },
