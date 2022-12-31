@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
   addSurvey,
+  deleteSurvey,
   getAllSurvyes,
   getSurveyById,
   updateSurvey,
@@ -82,10 +83,31 @@ export async function updateSurveyRequest(
   try {
     const surveyInput = { ...req.body };
     const surveyUpdated = await updateSurvey(+req.params.surveyId, surveyInput);
+    // throw new Error('Failed to update the survey');
     return res.status(200).json({
       error: null,
       message: 'Successfully updated survey',
       result: surveyUpdated,
+      success: true
+    })
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteSurveyRequest(
+  req: Request<SurveyIdParam, {}, {}>,
+  res: Response<OperationResponse<Survey>>,
+  next: NextFunction
+) {
+  try {
+
+    const surveyDeleted = await deleteSurvey(+req.params.surveyId);
+    // throw new Error('Failed to update the survey');
+    return res.status(200).json({
+      error: null,
+      message: 'Successfully deleted survey',
+      result: surveyDeleted,
       success: true
     })
   } catch (error) {

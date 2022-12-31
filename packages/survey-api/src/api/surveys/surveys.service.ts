@@ -4,6 +4,7 @@ import {
   createSurvey,
   findAllSurveys,
   findSurveyById,
+  removeSurveyById,
   updateSurveyById
 } from './surveys.dal';
 
@@ -25,4 +26,8 @@ export async function addSurvey(surveyInput: SurveyInput) {
 
 export async function updateSurvey(surveyId: number, surveyInput: SurveyInput) {
   return await updateSurveyById(surveyId, surveyInput);
+}
+
+export async function deleteSurvey(surveyId: number) {
+  return await removeSurveyById(surveyId);
 }

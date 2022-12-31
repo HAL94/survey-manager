@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from "@chakra-ui/react";
 import { Await, useLoaderData } from "react-router-dom";
 import { Response, Survey } from '../../utils';
-import { SurveyDetailForm } from '../../components';
+import { SurveyUpdateForm } from '../../components';
 
 export default function SurveyDetailPage() {
   const data = useLoaderData() as Response<Survey>;
@@ -18,7 +18,7 @@ export default function SurveyDetailPage() {
           }
         >
           {(result) => (
-            <SurveyDetailForm surveyData={result.result} />
+            <SurveyUpdateForm surveyData={result.result} />
           )}
         </Await>
       </React.Suspense>

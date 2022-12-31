@@ -1,5 +1,7 @@
-const Container = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
-  return <div className="container mx-auto p-7">{children}</div>;
+import { Container } from '@chakra-ui/react'
+
+const ContentContainer = ({ children }: { children: JSX.Element | JSX.Element[] | React.ReactNode[] }) => {
+  return <Container maxW="container.xl" marginY={10}>{children}</Container>;
 };
 
-export default Container;
+export default ContentContainer;

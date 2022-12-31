@@ -1,33 +1,28 @@
-import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { Container } from '../../layouts';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import { Response, Survey } from '../../utils';
-
+import { SurveyCard, SurveyAddFormDialog } from '../../components';
 
 const Home = () => {
   const data = useLoaderData() as Response<Survey[]>;
-  const navigate = useNavigate();
 
   return (
     <Container>
+      <SurveyAddFormDialog />
+
       {data.result.map((survey) => {
         return (
-          <div
-            className="border my-2 p-4 bg-white shadow-md cursor-pointer flex flex-row w-full justify-between"
-            onClick={() => navigate(`survey/${survey.id}`)}
-            key={survey.id}
-          >
-            <div className="flex flex-col justify-center items-start">
-              <h1 className="text-xl">{survey.title}</h1>
-              <span>{survey.description}</span>
-            </div>
-            <BiDotsVerticalRounded size={25} />
-          </div>
+          <SurveyCard
+            id={survey.id}
+            title={survey.title}
+            description={survey.description}
+            key={`survey-${survey.id}`}
+          />
         );
       })}
+
     </Container>
   );
 };
 
 export default Home;
-

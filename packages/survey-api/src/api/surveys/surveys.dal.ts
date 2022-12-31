@@ -59,3 +59,11 @@ export async function updateSurveyById(surveyId: number, surveyInput: SurveyInpu
   });
 
 }
+
+export async function removeSurveyById(surveyId: number) {
+  return await prisma.survey.delete({
+    where: {
+      id: surveyId
+    }
+  });
+}

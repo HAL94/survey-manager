@@ -30,6 +30,14 @@ router.post(
   SurveyController.updateSurveyRequest
 );
 
+router.delete(
+  '/:surveyId',
+  validateRequest({
+    params: SurveyIdParam,
+  }),
+  SurveyController.deleteSurveyRequest
+
+)
 router.get('/seed', SurveyController.seed);
 
 export default router;

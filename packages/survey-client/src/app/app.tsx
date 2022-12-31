@@ -5,12 +5,11 @@ import { RootLayout } from './layouts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Home, ErrorPage, SurveyPage, SurveyQuestionsPage, SurveyPageError, SurveyDetailPage } from './pages';
-
+import { ChakraProvider } from '@chakra-ui/react'
 
 import {
   allSurveysLoader,
   surveyDetailLoader,
-  surveyUpdate,
 } from './utils';
 
 const queryClient = new QueryClient();
@@ -30,13 +29,12 @@ const AppContent = () => {
         {
           path: 'survey/:surveyId',
           element: <SurveyPage />,
-          action: surveyUpdate,
           errorElement: <SurveyPageError />,
           children: [
             {
               path: '',
               loader: surveyDetailLoader(queryClient),
-              element: <SurveyDetailPage />,
+              element: <SurveyDetailPage />
             },
             {
               path: 'questions',
@@ -53,7 +51,9 @@ const AppContent = () => {
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppContent />
+      <ChakraProvider>
+        <AppContent />
+      </ChakraProvider>
     </QueryClientProvider>
   );
 }

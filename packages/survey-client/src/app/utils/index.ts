@@ -42,7 +42,7 @@ export const surveyDetailLoader =
 
 export const surveyUpdate = async ({ params, request }: { params: Params, request: Request }) => {
   const data = await request.formData();
-  return fetch(`${BASE_URI}/surveys/${params.surveyId}`, {
+  const response = await fetch(`${BASE_URI}/surveys/${params.surveyId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -51,5 +51,11 @@ export const surveyUpdate = async ({ params, request }: { params: Params, reques
       title: data.get('title'),
       description: data.get('description')
     })
-  }).then(res => res.json());
+  });
+  const result = await response.json();
+  // if (!result.success) {
+  //   throw new Error(result?.message || 'Something went wrong');
+  // }
+
+  return result;
 }
