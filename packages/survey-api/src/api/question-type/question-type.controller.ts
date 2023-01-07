@@ -55,6 +55,7 @@ export async function getAllQuestionTypesRequest(
       message: 'Ok',
       result: qtypes,
       error: null,
+      success: true
     });
   } catch (error) {
     next(error);

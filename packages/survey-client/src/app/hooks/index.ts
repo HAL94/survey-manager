@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URI, Response, Survey } from '../utils';
+import { BASE_URI, QType, QTypeDisplay, QTYPES_ICONS, Response, Survey } from '../utils';
 
 export const useFetchSurveys = () => {
   const { isLoading, error, data } = useQuery<any, unknown, Response<Survey[]>>(
@@ -45,7 +46,7 @@ export const useUpdateSurveyById = (id: number | string) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(survey),
-      }).then((res) => res.json())
+      }).then((res) => res.json()),
   });
   return {
     mutate: mutate,
@@ -55,7 +56,6 @@ export const useUpdateSurveyById = (id: number | string) => {
     data,
   };
 };
-
 
 export const useDeleteSurveyById = (id: number | string) => {
   const { isLoading, error, data, mutate, reset } = useMutation<
@@ -70,8 +70,8 @@ export const useDeleteSurveyById = (id: number | string) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-        }
-      }).then((res) => res.json())
+        },
+      }).then((res) => res.json()),
   });
   return {
     mutate: mutate,
@@ -82,7 +82,11 @@ export const useDeleteSurveyById = (id: number | string) => {
   };
 };
 
-export const useAddSurvey = () => {
+export const useAddSurvey = ({
+  onSuccessFn,
+}: {
+  onSuccessFn?: () => Promise<void> | void;
+}) => {
   // const client = useQueryClient();
   const navigate = useNavigate();
   const { isLoading, error, data, mutate, reset } = useMutation<
@@ -100,10 +104,13 @@ export const useAddSurvey = () => {
         },
         body: JSON.stringify(survey),
       }).then((res) => res.json()),
-      onSuccess: () => {
-        // client.invalidateQueries(['surveys'])
-        navigate('/');
+    onSuccess: async () => {
+      if (onSuccessFn) {
+        await onSuccessFn();
       }
+      // client.invalidateQueries(['surveys'])
+      navigate('/');
+    },
   });
   return {
     mutate: mutate,
@@ -111,5 +118,35 @@ export const useAddSurvey = () => {
     isLoading,
     error,
     data,
+  };
+};
+
+export const useAllQuestionTypes = () => {
+  const [types, setTypes] = useState<QTypeDisplay[]>([]);
+
+  const { isLoading, error } = useQuery<any, unknown, Response<QType[]>>({
+    queryKey: ['AllQuestionTypes'],
+    queryFn: () =>
+      fetch(`${BASE_URI}/types`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      if (data.success) {
+        setTypes(data.result.map((type: QType) => {
+          return {
+            ...type,
+            Icon: QTYPES_ICONS[type.type]
+          } as QTypeDisplay;
+        }))
+      }
+    }
+  });
+
+  return {
+    isLoading,
+    data: types,
+    error,
   };
 };

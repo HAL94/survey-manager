@@ -7,6 +7,7 @@ export async function createQuestionType(input: QuestionTypeInput) {
   return await prisma.questionType.create({
     data: {
       type: input.type,
+      title: input.title
     },
   });
 }

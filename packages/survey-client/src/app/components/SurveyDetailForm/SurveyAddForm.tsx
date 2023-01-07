@@ -1,25 +1,22 @@
 import { Survey } from '../../utils';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAddSurvey } from '../../hooks';
 import SurveyDetailForm from './SurveyDetailForm';
 
 const SurveyAddForm = () => {
-  const { isLoading, data, mutate, reset } = useAddSurvey();
-  const [survey, setSurvey] = useState<Survey>({
-    id: 0,
+  const { isLoading, data, mutate, reset } = useAddSurvey({ onSuccessFn: onSuccessAdd });
+  const [survey, setSurvey] = useState<Omit<Survey, 'id'>>({
     title: '',
     description: '',
   });
 
-  useEffect(() => {
-    if (data && data.success) {
-      setSurvey((prev) => ({
-        ...prev,
-        title: '',
-        description: '',
-      }));
-    }
-  }, [data]);
+  async function onSuccessAdd() {
+    setSurvey((prev) => ({
+      ...prev,
+      title: '',
+      description: '',
+    }));
+  }
 
   const onChangeHandler = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;

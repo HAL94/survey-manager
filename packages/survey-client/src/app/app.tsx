@@ -39,6 +39,7 @@ const AppContent = () => {
             {
               path: 'questions',
               element: <SurveyQuestionsPage />,
+              errorElement: <ErrorPage />
             },
           ],
         },

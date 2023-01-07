@@ -1,0 +1,3 @@
+.active-question {
+  @apply border-purple-900 border-l-2 border-b-0;
+}

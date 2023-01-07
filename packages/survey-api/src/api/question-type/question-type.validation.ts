@@ -2,6 +2,7 @@ import * as z from 'zod';
 import { QuestionTypesArr } from '../../utils/question-types';
 
 export const QuestionTypeInput = z.object({
+  title: z.string({ required_error: 'Title is required'}),
   type: z.enum(QuestionTypesArr, { required_error: 'Type passed is invalid' }),
 });
 

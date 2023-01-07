@@ -11,7 +11,7 @@ import React from 'react';
 import { Response, Survey } from '../../utils';
 
 interface Props {
-  surveyData: Survey;
+  surveyData: Survey | Omit<Survey, 'id'>;
   isLoading: boolean;
   data: Response<Survey> | undefined;
   reset: () => void;

@@ -22,6 +22,7 @@ model Survey {
 model QuestionType {
   id       String     @id @default(uuid())
   type     QType      @unique()
+  title    String
   Question Question[]
 }
 
@@ -64,7 +65,7 @@ model Answer {
 
 enum QType {
   // one opt, one ans
-  TEXT 
+  TEXT
   TEXT_EMAIL
   TEXT_URL
   TEXT_PASSWORD

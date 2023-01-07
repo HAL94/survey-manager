@@ -1,5 +1,5 @@
 button {
-  @apply mx-3 relative pb-2;
+  @apply !mx-3 relative !pb-2;
 }
 
 .active::after {
